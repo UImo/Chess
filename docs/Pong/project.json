@@ -1,0 +1,51 @@
+{
+  "name": "Projet transverse #1.1",
+  "assets": [
+    {
+      "id": "23",
+      "name": "Scenes",
+      "type": null,
+      "children": [
+        {
+          "id": "0",
+          "name": "Jeu",
+          "type": "scene"
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "name": "Sprite",
+      "type": null,
+      "children": [
+        {
+          "id": "6",
+          "name": "Balle",
+          "type": "sprite"
+        },
+        {
+          "id": "10",
+          "name": "Raquette",
+          "type": "sprite"
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "name": "script",
+      "type": null,
+      "children": [
+        {
+          "id": "12",
+          "name": "Comportements",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "id": "20",
+      "name": "Police",
+      "type": "font"
+    }
+  ]
+}
