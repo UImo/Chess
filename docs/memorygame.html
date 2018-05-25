@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+
+
+
+<head>
+<style>
+
+/*CSS HERE*/
+div#memory_board{
+	background:#0000;
+	border:#8B0000 1px solid;
+	width:800px;
+	height:540px;
+	padding:24px;
+	margin:0px auto;
+}
+div#memory_board > div{   /* to select each divs (chaque carte à retourner)*/
+	background: url(tile_bg.jpg) no-repeat;
+	border:#8B0000 1px solid;
+	width:71px;
+	height:71px;
+	float:left;
+	margin:10px;
+	padding:20px;
+	font-size:64px;
+	cursor:pointer;
+	text-align:center;
+}
+</style>
+<script>
+
+// JAVA HERE: we have first 4 variables being initialized 
+
+var memory_array = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H','I','I','J','J','K','K','L','L']; //array countaining all the content that are under the cards, dynamicly creating all the cards
+var memory_values = []; //empty array that will store the memory values
+var memory_tile_ids = []; // memory tiles id
+var tiles_flipped = 0; //to remember how many tiles are flipped
+
+//add a modifying method to the array object, we use the prototype propertype to access all arrays object
+Array.prototype.memory_tile_shuffle = function(){
+    var i = this.length, j, temp;
+    while(--i > 0){
+        j = Math.floor(Math.random() * (i+1));
+        temp = this[j];
+        this[j] = this[i];
+        this[i] = temp;
+    }
+}
+function newBoard(){
+	tiles_flipped = 0; //back to 0 each time we have a new board
+	var output = '';  //new variable
+    memory_array.memory_tile_shuffle(); // we apply the modifying method on the memory array so we can modify the values
+	for(var i = 0; i < memory_array.length; i++){
+		output += '<div id="tile_'+i+'" onclick="memoryFlipTile(this,\''+memory_array[i]+'\')"></div>'; //tile_0 then tile_1 then tile_2 etc... : first argument is the div that is being clicked and the second is the content
+		// new funtion memoryFlipTile: responsible for flipping the tiles over
+	}
+	document.getElementById('memory_board').innerHTML = output; //putting the elements on the board
+}
+function memoryFlipTile(tile,val){
+
+	// to flip a tile, tile is a card
+	if(tile.innerHTML == "" && memory_values.length < 2){ //if the tile is empty and the memory values lenght is less than 2
+		tile.style.background = '#FAEBD7'; // white backgroud for the card
+		tile.innerHTML = val; // the value is shown when we flip a card
+		if(memory_values.length == 0){ // if none current card is turned
+			memory_values.push(val); //push the value's card in the memory values array which is empty at the start
+			memory_tile_ids.push(tile.id);
+		} else if(memory_values.length == 1){ //if already a card is flipped
+			memory_values.push(val);
+			memory_tile_ids.push(tile.id);
+			if(memory_values[0] == memory_values[1]){ // if both cards are a match
+				tiles_flipped += 2; // we add 2 on the tiles flipped varables
+				// Clear both arrays so ready for a new matching sequence
+				memory_values = [];
+            	memory_tile_ids = [];
+				// Check to see if the whole board is cleared
+				if(tiles_flipped == memory_array.length){ // check is the tiles flipped are ALL the tiles
+					alert("Board cleared... generating new board");
+					document.getElementById('memory_board').innerHTML = "";
+					newBoard();
+				}
+			} else {
+				function flip2Back(){ // if the match is not made, the two cards are not the same
+				    // Flip the 2 tiles back over
+				    var tile_1 = document.getElementById(memory_tile_ids[0]);
+				    var tile_2 = document.getElementById(memory_tile_ids[1]);
+				    tile_1.style.background = 'url(tile_bg.jpg) no-repeat';
+            	    tile_1.innerHTML = "";
+				    tile_2.style.background = 'url(tile_bg.jpg) no-repeat';
+            	    tile_2.innerHTML = "";
+				    // Clear arrays
+				    memory_values = [];
+            	    memory_tile_ids = [];
+				}
+				setTimeout(flip2Back, 1000); // so the two cards stay flipped for 1 second
+			}
+		}
+	}
+}
+</script>
+
+</head>
+
+
+
+
+
+<body>
+
+<div id="memory_board"></div>
+<script>newBoard(); //generate the board and run the new board function, we put it here bc the page has to have access and know where the board div is before the board is load
+
+</script>  
+
+
+</body>
+</html>
